@@ -1,25 +1,22 @@
 function myFunction() {
   var getSpreadSheet = SpreadsheetApp.openById("1r-ZqwVnkWToFeNFo8FF0Vtwcff6PbkTiixJWZrLEU0k");
-  var sheet = getSpreadSheet.getSheetByName('Sheet3');
-  var lastRow = sheet.getLastRow();
-  var row = sheet.getRange(1,1,lastRow);
+  var sheet1 = getSpreadSheet.getSheetByName('Sheet3');
+  var sheet2 = getSpreadSheet.getSheetByName('Sheet4');
+  var lastRow = sheet1.getLastRow();
+  var row = sheet1.getRange(1,1,lastRow);
   var values = row.getValues();
-  Logger.log(values);
-  for (var counter = 0; counter <= lastRow; counter = counter + 1) {
-    //Logger.log(values[counter][0]);
-    var directions = Maps.newDirectionFinder()
-      .setOrigin('Bogota, Colombia')
-      .setDestination(values[counter][0]+',Colombia')
-      .setMode(Maps.DirectionFinder.Mode.DRIVING)
-      .getDirections();
-    Logger.log(values[counter][0]+' '+directions.routes[0].legs[0].duration.text);
+  Logger.log(values[77][0])
+  for (var i = 1; i <= lastRow; i = i+1) {
+    for (var j = 1; j <= lastRow; j = j+1 ){
+      var directions = Maps.newDirectionFinder()
+        .setOrigin(values[i][0]+',Colombia')
+        .setDestination(values[j][0]+',Colombia')
+        .setMode(Maps.DirectionFinder.Mode.DRIVING)
+        .getDirections();
+      Logger.log(values[i][0]+' '+values[j][0]);
+      //SpreadsheetApp.flush();
+      sheet2.getRange(j+1, i+1).setValue(directions.routes[0].legs[0].duration.text);
+      //SpreadsheetApp.flush();
+    }
   }
-
-// Logs how long it would take to walk from Times Square to Central Park.
-var directions = Maps.newDirectionFinder()
-    .setOrigin('Bogota, Colombia')
-    .setDestination('AGUA DE DIOS, Colombia')
-    .setMode(Maps.DirectionFinder.Mode.DRIVING)
-    .getDirections();
-Logger.log(directions.routes[0].legs[0].duration.text);
 }
