@@ -5,7 +5,7 @@ from minutos import lista_minutos
 import math
 
 cap_camiones = 10000  # Capacidad de vacunas de los camiones
-num_camiones = 100   # Número de camiones a utilizar
+num_camiones = 17   # Número de camiones a utilizar
 vacunas_disponibles = 80000  # Vacunas disponibles en el centro principal
 
 # El problema se resuelve como si el camión saliera vacío, recogiera vacunas y
@@ -20,7 +20,7 @@ def create_data():  # Se crea un diccionario con la información que necesita el
     data['truck_capacities'] = []
     for i in range(num_camiones):
         data['truck_capacities'].append(cap_camiones)
-    data['demanda'] = []
+    data['demanda'] = [0]
     for pob_municipio in poblacion:  # Se calcula las vacunas que necesita cada municipio como una proporción de la población a vacunar y las vacunas disponibles
         data['demanda'].append(math.floor(
             pob_municipio/sum(poblacion)*vacunas_disponibles))
@@ -94,12 +94,13 @@ def main():
     #Busca un circuito comenzando desde el punto inicial que va escogiendo la arista con el menor coste
     search_parameters.first_solution_strategy = ( 
         routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC)
-    # Utiliza el método de descenso del gradiente para encontrar una mejor solución
+    # Utiliza métodos heurísticos para encontrar una mejor solución
     search_parameters.local_search_metaheuristic = (routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH)
-    search_parameters.time_limit.FromSeconds(1)
+    search_parameters.time_limit.FromSeconds(86400)
 
     #Solucionar el problema
     solucion = routing.SolveWithParameters(search_parameters)
 
-    print_solution()
+    print_solution(data,manager, routing,solucion)
 main()
+
