@@ -29,7 +29,7 @@ def create_data():  # Se crea un diccionario con la información que necesita el
 
 def print_solution(data, manager, routing, solution):
     """Prints solution on console."""
-    print(f'Objective: {solution.ObjectiveValue()}')
+    print('Objective: {0}'.format(solution.ObjectiveValue()))
     total_distance = 0
     total_load = 0
     for vehicle_id in range(data['num_vehicles']):
